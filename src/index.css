@@ -1,0 +1,122 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Archivo", sans-serif;
+  --font-sans: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  --color-ink: #0a0a0a;
+  --color-paper: #ffffff;
+  --color-mist: #f4f4f2;
+  --color-line: #d9d8d4;
+  --color-line-dark: #2b2b2b;
+  --color-muted: #7a7a76;
+  --color-muted-dark: #8f8f8b;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-line);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 3px;
+  }
+}
+
+@layer components {
+  .label-tag {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.02em;
+    color: var(--color-muted);
+  }
+
+  .hairline {
+    border-top: 1px solid var(--color-line);
+  }
+
+  .btn-outline {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    border: 1px solid var(--color-ink);
+    padding: 0.65rem 1.5rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+  .btn-outline:hover {
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+
+  .btn-solid {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    background: var(--color-ink);
+    color: var(--color-paper);
+    padding: 0.65rem 1.5rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: opacity 0.2s ease;
+  }
+  .btn-solid:hover {
+    opacity: 0.82;
+  }
+
+  .field {
+    width: 100%;
+    background: transparent;
+    border: 1px solid var(--color-line);
+    padding: 0.85rem 1rem;
+    font-family: var(--font-sans);
+    font-size: 0.925rem;
+  }
+  .field:focus {
+    border-color: var(--color-ink);
+  }
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
