@@ -36,7 +36,7 @@ export default function Hero({ hero }) {
   return (
     <section
       id="home"
-      className="relative min-h-screen w-full flex items-end overflow-hidden bg-ink"
+      className="relative min-h-screen min-h-[100svh] w-full flex items-end overflow-hidden bg-ink"
     >
       {/* Background Image */}
       {image?.url && (
