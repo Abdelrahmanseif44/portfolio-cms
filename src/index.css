@@ -17,17 +17,53 @@
 @layer base {
   * {
     border-color: var(--color-line);
+    box-sizing: border-box;
   }
 
   html {
     scroll-behavior: smooth;
+    width: 100%;
+    overflow-x: hidden;
   }
 
   body {
+    margin: 0;
+    width: 100%;
+    min-width: 320px;
     background: var(--color-paper);
     color: var(--color-ink);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  #root {
+    width: 100%;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  img,
+  video,
+  svg {
+    max-width: 100%;
+  }
+
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  input,
+  textarea,
+  select {
+    max-width: 100%;
   }
 
   ::selection {
@@ -39,6 +75,7 @@
     html {
       scroll-behavior: auto;
     }
+
     *,
     *::before,
     *::after {
@@ -74,9 +111,14 @@
     padding: 0.65rem 1.5rem;
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 0.5rem;
-    transition: background-color 0.2s ease, color 0.2s ease;
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease,
+      transform 0.2s ease;
   }
+
   .btn-outline:hover {
     background: var(--color-ink);
     color: var(--color-paper);
@@ -90,11 +132,20 @@
     padding: 0.65rem 1.5rem;
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 0.5rem;
-    transition: opacity 0.2s ease;
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease;
   }
+
   .btn-solid:hover {
     opacity: 0.82;
+  }
+
+  .btn-solid:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
   }
 
   .field {
@@ -104,9 +155,21 @@
     padding: 0.85rem 1rem;
     font-family: var(--font-sans);
     font-size: 0.925rem;
+    outline: none;
+    transition:
+      border-color 0.2s ease,
+      box-shadow 0.2s ease;
   }
+
   .field:focus {
     border-color: var(--color-ink);
+    box-shadow: 0 0 0 1px var(--color-ink);
+  }
+
+  /* Prevent long text from breaking the layout */
+  .break-safe {
+    overflow-wrap: anywhere;
+    word-break: break-word;
   }
 }
 
@@ -115,8 +178,36 @@
     opacity: 0;
     transform: translateY(14px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* Small phones */
+@media (max-width: 480px) {
+  .btn-outline,
+  .btn-solid {
+    padding: 0.65rem 1.1rem;
+  }
+
+  .field {
+    padding: 0.8rem 0.9rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Tablet */
+@media (min-width: 768px) {
+  body {
+    min-width: 0;
+  }
+}
+
+/* Large screens */
+@media (min-width: 1536px) {
+  body {
+    font-size: 16px;
   }
 }
