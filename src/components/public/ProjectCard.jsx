@@ -1,10 +1,13 @@
+
 export default function ProjectCard({ project, index }) {
-  const num = String(index + 1).padStart(3, '0')
-  const total = String(project.total ?? '').padStart(3, '0')
+  const num = String(index + 1).padStart(2, '0')
+  const total = String(project.total ?? '').padStart(2, '0')
 
-  const Wrapper = project.url ? 'a' : 'div'
+  const hasLink = Boolean(project.url)
 
-  const wrapperProps = project.url
+  const Wrapper = hasLink ? 'a' : 'div'
+
+  const wrapperProps = hasLink
     ? {
         href: project.url,
         target: '_blank',
@@ -16,130 +19,247 @@ export default function ProjectCard({ project, index }) {
     <Wrapper
       {...wrapperProps}
       className="
-        group relative flex flex-col overflow-hidden
-        border border-line bg-paper
-        transition-all duration-500 ease-out
-        hover:-translate-y-2
-        hover:shadow-[0_20px_50px_rgba(0,0,0,0.12)]
+        group
+        relative
+        block
+        overflow-hidden
+        border
+        border-line
+        bg-paper
+        transition-all
+        duration-500
+        hover:border-ink
+        hover:-translate-y-1
+        focus-visible:outline-none
       "
     >
-      {/* Image */}
-      <div className="relative aspect-[4/3] overflow-hidden bg-mist">
-
+      {/* IMAGE */}
+      <div
+        className="
+          relative
+          aspect-[4/3]
+          overflow-hidden
+          bg-mist
+        "
+      >
         {project.image?.url ? (
           <img
             src={project.image.url}
-            alt={project.title || ''}
+            alt={project.title || 'Project'}
+            loading="lazy"
             className="
-              w-full h-full object-cover grayscale
-              transition-all duration-700 ease-out
-              group-hover:scale-110
+              w-full
+              h-full
+              object-cover
+              grayscale
+              transition-all
+              duration-700
+              ease-out
+              group-hover:scale-[1.045]
               group-hover:grayscale-0
             "
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center">
-            <span className="label-tag opacity-40">
-              No image
+          <div className="w-full h-full flex items-center justify-center bg-mist">
+            <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted">
+              No preview
             </span>
           </div>
         )}
 
-        {/* Dark overlay */}
+        {/* DARK HOVER OVERLAY */}
         <div
           className="
-            absolute inset-0 bg-ink/0
-            transition-all duration-500
-            group-hover:bg-ink/20
+            absolute
+            inset-0
+            bg-ink/0
+            group-hover:bg-ink/35
+            transition-colors
+            duration-500
           "
         />
 
-        {/* Project number */}
+        {/* TOP PROJECT NUMBER */}
         <div
           className="
-            absolute top-4 left-4
-            font-mono text-xs text-white
-            opacity-0 translate-y-2
-            transition-all duration-500
+            absolute
+            top-4
+            left-4
+            right-4
+            flex
+            items-center
+            justify-between
+            font-mono
+            text-[9px]
+            uppercase
+            tracking-[0.16em]
+            text-white
+            opacity-0
+            -translate-y-2
             group-hover:opacity-100
             group-hover:translate-y-0
+            transition-all
+            duration-500
           "
         >
-          {num} / {total || '00'}
+          <span>
+            {num}/{total || '00'}
+          </span>
+
+          {hasLink && (
+            <span>
+              View project
+            </span>
+          )}
         </div>
 
-        {/* Arrow */}
-        <div
-          className="
-            absolute top-4 right-4
-            w-10 h-10
-            border border-white
-            flex items-center justify-center
-            text-white text-lg
-            opacity-0 scale-75
-            transition-all duration-500
-            group-hover:opacity-100
-            group-hover:scale-100
-          "
-        >
-          ↗
-        </div>
+        {/* CENTER ARROW */}
+        {hasLink && (
+          <div
+            className="
+              absolute
+              inset-0
+              flex
+              items-center
+              justify-center
+              pointer-events-none
+            "
+          >
+            <span
+              className="
+                w-12
+                h-12
+                border
+                border-white/70
+                rounded-full
+                flex
+                items-center
+                justify-center
+                text-white
+                text-lg
+                opacity-0
+                scale-75
+                group-hover:opacity-100
+                group-hover:scale-100
+                transition-all
+                duration-500
+              "
+            >
+              ↗
+            </span>
+          </div>
+        )}
       </div>
 
-      {/* Content */}
-      <div className="p-5 flex flex-col gap-3 flex-1">
+      {/* CONTENT */}
+      <div className="p-5 md:p-6 flex flex-col gap-3">
 
-        {/* Number */}
-        <p
-          className="
-            label-tag
-            transition-transform duration-300
-            group-hover:translate-x-1
-          "
-        >
-          {num}/{total || '00'}
-        </p>
+        {/* META */}
+        <div className="flex items-center justify-between gap-4">
+          <p className="label-tag">
+            {num}/{total || '00'}
+          </p>
 
-        {/* Title */}
+          {project.category && (
+            <span
+              className="
+                font-mono
+                text-[9px]
+                uppercase
+                tracking-[0.12em]
+                text-muted
+                text-right
+              "
+            >
+              {project.category}
+            </span>
+          )}
+        </div>
+
+        {/* TITLE */}
         <h3
           className="
-            font-display font-bold text-lg leading-tight
-            transition-transform duration-300
+            font-display
+            font-bold
+            text-lg
+            md:text-xl
+            leading-tight
+            transition-transform
+            duration-500
             group-hover:translate-x-1
           "
         >
           {project.title}
         </h3>
 
-        {/* Description */}
-        <p className="text-sm text-muted flex-1">
-          {project.description}
-        </p>
+        {/* DESCRIPTION */}
+        {project.description && (
+          <p
+            className="
+              text-sm
+              text-muted
+              leading-relaxed
+              line-clamp-3
+            "
+          >
+            {project.description}
+          </p>
+        )}
 
-        {/* Button */}
-        <div className="mt-1">
+        {/* BOTTOM */}
+        <div
+          className="
+            pt-3
+            mt-1
+            border-t
+            border-line
+            flex
+            items-center
+            justify-between
+          "
+        >
           <span
             className="
-              btn-outline inline-flex items-center gap-3
-              transition-all duration-300
-              group-hover:bg-ink
-              group-hover:text-white
+              font-mono
+              text-[10px]
+              uppercase
+              tracking-[0.14em]
+              text-muted
             "
           >
             {project.buttonText || 'Discover'}
+          </span>
 
-            <span
-              className="
-                transition-transform duration-300
-                group-hover:translate-x-1
-              "
-            >
-              →
-            </span>
+          <span
+            className="
+              font-mono
+              text-sm
+              transition-all
+              duration-500
+              group-hover:translate-x-1
+              group-hover:-translate-y-1
+            "
+          >
+            →
           </span>
         </div>
-
       </div>
+
+      {/* BOTTOM ACCENT LINE */}
+      <span
+        className="
+          absolute
+          bottom-0
+          left-0
+          h-px
+          w-0
+          bg-ink
+          group-hover:w-full
+          transition-all
+          duration-700
+          ease-out
+        "
+      />
     </Wrapper>
   )
 }

@@ -13,7 +13,8 @@ function PlaceholderCard({ index }) {
         border
         border-line
         bg-paper
-        aspect-[4/3]
+        min-h-[280px]
+        md:min-h-[340px]
         flex
         flex-col
         justify-between
@@ -24,13 +25,13 @@ function PlaceholderCard({ index }) {
         hover:border-ink
       "
     >
-      {/* Subtle hover background */}
+      {/* Hover layer */}
       <div
         className="
           pointer-events-none
           absolute
           inset-0
-          bg-ink/[0.015]
+          bg-ink/[0.02]
           opacity-0
           group-hover:opacity-100
           transition-opacity
@@ -39,7 +40,7 @@ function PlaceholderCard({ index }) {
       />
 
       {/* Top */}
-      <div className="relative flex items-center justify-between">
+      <div className="relative z-10 flex items-center justify-between">
         <span
           className="
             font-mono
@@ -54,41 +55,61 @@ function PlaceholderCard({ index }) {
 
         <span
           className="
-            flex
-            items-center
-            gap-2
             font-mono
             text-[9px]
             uppercase
-            tracking-[0.12em]
+            tracking-[0.15em]
             text-muted
+            flex
+            items-center
+            gap-2
           "
         >
           <span className="w-1.5 h-1.5 rounded-full bg-ink/30 animate-pulse" />
-          Empty
+          Coming soon
         </span>
       </div>
 
       {/* Center */}
-      <div className="relative">
-        <div className="w-12 h-px bg-line mb-5 group-hover:w-20 transition-all duration-500" />
+      <div className="relative z-10">
+        <span
+          className="
+            block
+            w-10
+            h-px
+            bg-line
+            mb-5
+            transition-all
+            duration-500
+            group-hover:w-16
+            group-hover:bg-ink/40
+          "
+        />
 
         <h3
           className="
             font-display
             font-bold
-            text-lg
-            md:text-xl
+            text-xl
+            md:text-2xl
             text-ink/30
             transition-colors
             duration-500
-            group-hover:text-ink/50
+            group-hover:text-ink/60
           "
         >
           New project
         </h3>
 
-        <p className="mt-2 text-sm text-muted/60 max-w-xs">
+        <p
+          className="
+            mt-3
+            text-sm
+            text-muted/60
+            leading-relaxed
+            max-w-xs
+          "
+        >
           Add a project from the admin dashboard.
         </p>
       </div>
@@ -97,6 +118,7 @@ function PlaceholderCard({ index }) {
       <div
         className="
           relative
+          z-10
           flex
           items-center
           justify-between
@@ -114,13 +136,13 @@ function PlaceholderCard({ index }) {
             text-muted
           "
         >
-          Coming soon
+          Portfolio
         </span>
 
         <span
           className="
             font-mono
-            text-[10px]
+            text-sm
             text-muted
             transition-transform
             duration-300
@@ -136,7 +158,7 @@ function PlaceholderCard({ index }) {
 
 function EmptyWorksState() {
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="relative z-10 max-w-6xl mx-auto">
       <div
         className="
           grid
@@ -154,7 +176,15 @@ function EmptyWorksState() {
         ))}
       </div>
 
-      <div className="flex items-center justify-center gap-3 mt-10">
+      <div
+        className="
+          flex
+          items-center
+          justify-center
+          gap-3
+          mt-10
+        "
+      >
         <span className="w-8 h-px bg-line" />
 
         <p
@@ -200,12 +230,13 @@ export default function Works({ projects = [], description }) {
         className="
           pointer-events-none
           absolute
-          top-10
+          top-8
           left-1/2
           -translate-x-1/2
           font-display
           font-black
           text-[20vw]
+          md:text-[16vw]
           leading-none
           text-ink/[0.025]
           select-none

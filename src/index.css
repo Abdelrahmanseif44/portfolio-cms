@@ -176,15 +176,122 @@
 @keyframes reveal {
   from {
     opacity: 0;
-    transform: translateY(14px);
+    transform: translate3d(0, 28px, 0);
   }
 
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translate3d(0, 0, 0);
   }
 }
 
+/* Smooth scrolling reveal */
+.reveal {
+  will-change: transform, opacity;
+}
+
+/* Animated scroll line */
+@keyframes scrollLine {
+  0% {
+    transform: translateY(-120%);
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 1;
+  }
+
+  70% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(220%);
+    opacity: 0;
+  }
+}
+
+/* Floating indicator */
+@keyframes floatArrow {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(6px);
+  }
+}
+
+/* Subtle image movement */
+@keyframes heroFloat {
+  0%,
+  100% {
+    transform: scale(1.05);
+  }
+
+  50% {
+    transform: scale(1.075);
+  }
+}
+
+/* Soft pulse */
+@keyframes softPulse {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Better button interaction */
+.btn-outline,
+.btn-solid {
+  will-change: transform;
+}
+
+.btn-outline:hover,
+.btn-solid:hover {
+  transform: translateY(-2px);
+}
+
+.btn-outline:active,
+.btn-solid:active {
+  transform: translateY(0);
+}
+
+/* Project image interaction */
+.group img {
+  will-change: transform;
+}
+
+/* Smooth links */
+a,
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Mobile: reduce movement */
+@media (max-width: 767px) {
+  .reveal {
+    transform: translate3d(0, 18px, 0);
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .group img,
+  .btn-outline,
+  .btn-solid {
+    transition: none !important;
+    animation: none !important;
+    transform: none !important;
+  }
+}
 /* Small phones */
 @media (max-width: 480px) {
   .btn-outline,
@@ -209,5 +316,24 @@
 @media (min-width: 1536px) {
   body {
     font-size: 16px;
+  }
+}
+@keyframes scrollLine {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+
+  30% {
+    opacity: 1;
+  }
+
+  70% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(200%);
+    opacity: 0;
   }
 }
