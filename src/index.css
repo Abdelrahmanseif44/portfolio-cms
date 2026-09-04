@@ -14,6 +14,11 @@
   --color-muted-dark: #8f8f8b;
 }
 
+
+/* ========================================
+   BASE
+======================================== */
+
 @layer base {
   * {
     border-color: var(--color-line);
@@ -92,7 +97,15 @@
   }
 }
 
+
+/* ========================================
+   COMPONENTS
+======================================== */
+
 @layer components {
+
+  /* Label */
+
   .label-tag {
     font-family: var(--font-mono);
     font-size: 0.75rem;
@@ -100,47 +113,87 @@
     color: var(--color-muted);
   }
 
+
+  /* Hairline */
+
   .hairline {
     border-top: 1px solid var(--color-line);
   }
 
+
+  /* ========================================
+     OUTLINE BUTTON
+  ======================================== */
+
   .btn-outline {
     font-family: var(--font-mono);
     font-size: 0.8rem;
+
     border: 1px solid var(--color-ink);
+
     padding: 0.65rem 1.5rem;
+
     display: inline-flex;
     align-items: center;
     justify-content: center;
+
     gap: 0.5rem;
+
     transition:
-      background-color 0.2s ease,
-      color 0.2s ease,
-      transform 0.2s ease;
+      background-color 0.25s ease,
+      color 0.25s ease,
+      transform 0.25s ease;
+
+    will-change: transform;
   }
 
   .btn-outline:hover {
-    background: var(--color-ink);
+    background-color: var(--color-ink);
     color: var(--color-paper);
+
+    transform: translateY(-2px);
   }
+
+  .btn-outline:active {
+    transform: translateY(0);
+  }
+
+
+  /* ========================================
+     SOLID BUTTON
+  ======================================== */
 
   .btn-solid {
     font-family: var(--font-mono);
     font-size: 0.8rem;
+
     background: var(--color-ink);
     color: var(--color-paper);
+
     padding: 0.65rem 1.5rem;
+
     display: inline-flex;
     align-items: center;
     justify-content: center;
+
     gap: 0.5rem;
+
     transition:
-      opacity 0.2s ease,
-      transform 0.2s ease;
+      background-color 0.25s ease,
+      opacity 0.25s ease,
+      transform 0.25s ease;
+
+    will-change: transform;
   }
 
   .btn-solid:hover {
-    opacity: 0.82;
+    background-color: var(--color-muted);
+
+    transform: translateY(-2px);
+  }
+
+  .btn-solid:active {
+    transform: translateY(0);
   }
 
   .btn-solid:disabled {
@@ -148,14 +201,25 @@
     opacity: 0.5;
   }
 
+
+  /* ========================================
+     INPUT FIELD
+  ======================================== */
+
   .field {
     width: 100%;
+
     background: transparent;
+
     border: 1px solid var(--color-line);
+
     padding: 0.85rem 1rem;
+
     font-family: var(--font-sans);
     font-size: 0.925rem;
+
     outline: none;
+
     transition:
       border-color 0.2s ease,
       box-shadow 0.2s ease;
@@ -163,161 +227,186 @@
 
   .field:focus {
     border-color: var(--color-ink);
-    box-shadow: 0 0 0 1px var(--color-ink);
+
+    box-shadow:
+      0 0 0 1px var(--color-ink);
   }
 
-  /* Prevent long text from breaking the layout */
+
+  /* ========================================
+     SAFE TEXT
+  ======================================== */
+
   .break-safe {
     overflow-wrap: anywhere;
     word-break: break-word;
   }
 }
 
+
+/* ========================================
+   HERO IMAGE
+======================================== */
+
+.hero-visual {
+  position: relative;
+
+  perspective: 1000px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+
+  overflow: visible;
+}
+
+
+/* ========================================
+   HERO IMAGE NORMAL STATE
+======================================== */
+
+.hero-image {
+  display: block;
+
+  width: 100%;
+  height: auto;
+
+  transform:
+    translate3d(0, 0, 0)
+    scale(1);
+
+  transform-origin: center center;
+
+  transition:
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.5s ease;
+
+  will-change: transform;
+
+  backface-visibility: hidden;
+}
+
+
+/* ========================================
+   HERO IMAGE HOVER
+======================================== */
+
+.hero-visual:hover .hero-image {
+  transform:
+    translate3d(0, -8px, 0)
+    scale(1.04)
+    rotateX(2deg)
+    rotateY(-2deg);
+}
+
+
+/* ========================================
+   OPTIONAL HERO GLOW
+======================================== */
+
+.hero-visual::after {
+  content: "";
+
+  position: absolute;
+
+  left: 50%;
+  bottom: 5%;
+
+  width: 60%;
+  height: 20%;
+
+  transform:
+    translateX(-50%)
+    scale(0.8);
+
+  background: rgba(0, 0, 0, 0.08);
+
+  filter: blur(35px);
+
+  opacity: 0;
+
+  pointer-events: none;
+
+  transition:
+    opacity 0.5s ease,
+    transform 0.7s ease;
+}
+
+.hero-visual:hover::after {
+  opacity: 1;
+
+  transform:
+    translateX(-50%)
+    scale(1);
+}
+
+
+/* ========================================
+   PROJECT IMAGE
+======================================== */
+
+.group {
+  transition:
+    transform 0.35s ease,
+    border-color 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+.group:hover {
+  transform: translateY(-6px);
+
+  border-color: var(--color-ink);
+
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.08);
+}
+
+.group img {
+  will-change: transform;
+
+  transition:
+    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.group:hover img {
+  transform: scale(1.04);
+}
+
+
+/* ========================================
+   REVEAL ANIMATION
+======================================== */
+
 @keyframes reveal {
   from {
     opacity: 0;
-    transform: translate3d(0, 28px, 0);
+
+    transform:
+      translate3d(0, 28px, 0);
   }
 
   to {
     opacity: 1;
-    transform: translate3d(0, 0, 0);
+
+    transform:
+      translate3d(0, 0, 0);
   }
 }
 
+
 /* Smooth scrolling reveal */
+
 .reveal {
   will-change: transform, opacity;
 }
 
-/* Animated scroll line */
-@keyframes scrollLine {
-  0% {
-    transform: translateY(-120%);
-    opacity: 0;
-  }
 
-  20% {
-    opacity: 1;
-  }
+/* ========================================
+   SCROLL LINE
+======================================== */
 
-  70% {
-    opacity: 1;
-  }
-
-  100% {
-    transform: translateY(220%);
-    opacity: 0;
-  }
-}
-
-/* Floating indicator */
-@keyframes floatArrow {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-
-  50% {
-    transform: translateY(6px);
-  }
-}
-
-/* Subtle image movement */
-@keyframes heroFloat {
-  0%,
-  100% {
-    transform: scale(1.05);
-  }
-
-  50% {
-    transform: scale(1.075);
-  }
-}
-
-/* Soft pulse */
-@keyframes softPulse {
-  0%,
-  100% {
-    opacity: 0.35;
-  }
-
-  50% {
-    opacity: 0.7;
-  }
-}
-
-/* Better button interaction */
-.btn-outline,
-.btn-solid {
-  will-change: transform;
-}
-
-.btn-outline:hover,
-.btn-solid:hover {
-  transform: translateY(-2px);
-}
-
-.btn-outline:active,
-.btn-solid:active {
-  transform: translateY(0);
-}
-
-/* Project image interaction */
-.group img {
-  will-change: transform;
-}
-
-/* Smooth links */
-a,
-button {
-  -webkit-tap-highlight-color: transparent;
-}
-
-/* Mobile: reduce movement */
-@media (max-width: 767px) {
-  .reveal {
-    transform: translate3d(0, 18px, 0);
-  }
-}
-
-/* Accessibility */
-@media (prefers-reduced-motion: reduce) {
-  .reveal,
-  .group img,
-  .btn-outline,
-  .btn-solid {
-    transition: none !important;
-    animation: none !important;
-    transform: none !important;
-  }
-}
-/* Small phones */
-@media (max-width: 480px) {
-  .btn-outline,
-  .btn-solid {
-    padding: 0.65rem 1.1rem;
-  }
-
-  .field {
-    padding: 0.8rem 0.9rem;
-    font-size: 0.9rem;
-  }
-}
-
-/* Tablet */
-@media (min-width: 768px) {
-  body {
-    min-width: 0;
-  }
-}
-
-/* Large screens */
-@media (min-width: 1536px) {
-  body {
-    font-size: 16px;
-  }
-}
 @keyframes scrollLine {
   0% {
     transform: translateY(-100%);
@@ -335,5 +424,187 @@ button {
   100% {
     transform: translateY(200%);
     opacity: 0;
+  }
+}
+
+
+/* ========================================
+   FLOATING ARROW
+======================================== */
+
+@keyframes floatArrow {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(6px);
+  }
+}
+
+
+/* ========================================
+   HERO FLOAT
+======================================== */
+
+@keyframes heroFloat {
+  0%,
+  100% {
+    transform: scale(1.05);
+  }
+
+  50% {
+    transform: scale(1.075);
+  }
+}
+
+
+/* ========================================
+   SOFT PULSE
+======================================== */
+
+@keyframes softPulse {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+
+  50% {
+    opacity: 0.7;
+  }
+}
+
+
+/* ========================================
+   LINKS
+======================================== */
+
+a,
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+
+/* ========================================
+   MOBILE
+======================================== */
+
+@media (max-width: 767px) {
+
+  .reveal {
+    transform:
+      translate3d(0, 18px, 0);
+  }
+
+  .hero-visual:hover .hero-image {
+    transform:
+      translate3d(0, 0, 0)
+      scale(1);
+  }
+
+  .hero-visual:hover::after {
+    opacity: 0;
+  }
+}
+
+
+/* ========================================
+   ACCESSIBILITY
+======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .reveal,
+  .group img,
+  .btn-outline,
+  .btn-solid,
+  .hero-image,
+  .hero-visual::after {
+    transition: none !important;
+
+    animation: none !important;
+
+    transform: none !important;
+  }
+
+  .group:hover,
+  .group:hover img,
+  .hero-visual:hover .hero-image {
+    transform: none !important;
+  }
+}
+
+
+/* ========================================
+   SMALL PHONES
+======================================== */
+
+@media (max-width: 480px) {
+
+  .btn-outline,
+  .btn-solid {
+    padding:
+      0.65rem 1.1rem;
+  }
+
+  .field {
+    padding:
+      0.8rem 0.9rem;
+
+    font-size: 0.9rem;
+  }
+}
+
+
+/* ========================================
+   TABLET
+======================================== */
+
+@media (min-width: 768px) {
+
+  body {
+    min-width: 0;
+  }
+}
+
+
+/* ========================================
+   LARGE SCREENS
+======================================== */
+
+@media (min-width: 1536px) {
+
+  body {
+    font-size: 16px;
+  }
+}
+
+.custom-cursor {
+  position: fixed;
+  width: 42px;
+  height: 42px;
+
+  object-fit: contain;
+
+  pointer-events: none;
+  z-index: 999999;
+
+  transform: translate(-50%, -50%);
+}
+
+@media (min-width: 768px) {
+  * {
+    cursor: none !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .custom-cursor {
+    display: none;
+  }
+
+  * {
+    cursor: auto !important;
   }
 }

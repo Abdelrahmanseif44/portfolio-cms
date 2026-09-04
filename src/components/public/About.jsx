@@ -1,13 +1,13 @@
-import Reveal from '../shared/Reveal'
+import Reveal from "../shared/Reveal";
 
 export default function About({ about }) {
-  if (!about || about.enabled === false) return null
+  if (!about || about.enabled === false) return null;
 
   const {
     heading,
     paragraphs = [],
     image,
-  } = about
+  } = about;
 
   return (
     <section
@@ -170,7 +170,7 @@ export default function About({ about }) {
             >
               <img
                 src={
-                  typeof image === 'string'
+                  typeof image === "string"
                     ? image
                     : image.url
                 }
@@ -232,7 +232,16 @@ export default function About({ about }) {
                   text-white/70
                 "
               >
-                <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                <span
+                  className="
+                    w-1.5
+                    h-1.5
+                    rounded-full
+                    bg-white
+                    animate-pulse
+                  "
+                />
+
                 About
               </span>
             </div>
@@ -240,5 +249,5 @@ export default function About({ about }) {
         )}
       </div>
     </section>
-  )
+  );
 }
