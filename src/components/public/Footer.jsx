@@ -1,4 +1,3 @@
-
 export default function Footer({ siteTitle, footerText }) {
   return (
     <footer
@@ -22,7 +21,7 @@ export default function Footer({ siteTitle, footerText }) {
           sm:flex-row
           items-center
           justify-between
-          gap-3
+          gap-4
           text-center
           sm:text-left
         "
@@ -44,6 +43,20 @@ export default function Footer({ siteTitle, footerText }) {
             {footerText}
           </p>
         )}
+
+        <a
+          href="/admin"
+          className="
+            label-tag
+            opacity-30
+            hover:opacity-100
+            transition-all
+            duration-300
+            hover:translate-y-[-1px]
+          "
+        >
+          Admin
+        </a>
       </div>
     </footer>
   )
