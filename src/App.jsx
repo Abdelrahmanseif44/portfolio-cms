@@ -12,7 +12,7 @@ import ContactEditor from './components/admin/ContactEditor'
 import SocialLinksEditor from './components/admin/SocialLinksEditor'
 import SiteSettingsEditor from './components/admin/SiteSettingsEditor'
 import MessagesViewer from './components/admin/MessagesViewer'
-import CustomCursor from "./utils/CustomCursor";
+import { CustomCursor } from "./utils/CustomCursor";
 
 export default function App() {
   return (

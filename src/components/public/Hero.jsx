@@ -11,8 +11,13 @@ export default function Hero({ hero }) {
 
   const [mouse, setMouse] = useState({ x: 0, y: 0 })
   const [scrollY, setScrollY] = useState(0)
+  const [loaded, setLoaded] = useState(false)
 
   useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoaded(true)
+    }, 100)
+
     let ticking = false
 
     function handleMouseMove(e) {
@@ -33,25 +38,40 @@ export default function Hero({ hero }) {
       }
     }
 
-    window.addEventListener('mousemove', handleMouseMove)
+    window.addEventListener('mousemove', handleMouseMove, {
+      passive: true,
+    })
+
     window.addEventListener('scroll', handleScroll, {
       passive: true,
     })
 
     return () => {
+      clearTimeout(timer)
       window.removeEventListener('mousemove', handleMouseMove)
       window.removeEventListener('scroll', handleScroll)
     }
   }, [])
 
-  // Keep parallax subtle
-  const imageMoveX = mouse.x * -8
-  const imageMoveY = mouse.y * -8
+  const imageMoveX = mouse.x * -24
+  const imageMoveY = mouse.y * -24
 
-  const titleMoveX = mouse.x * 4
-  const titleMoveY = mouse.y * 4 - Math.min(scrollY * 0.035, 30)
+  const titleMoveX = mouse.x * 14
+  const titleMoveY =
+    mouse.y * 12 - Math.min(scrollY * 0.06, 55)
 
-  const infoMove = mouse.x * 5
+  const infoMoveX = mouse.x * 18
+
+  const lightX = mouse.x * 220
+  const lightY = mouse.y * 150
+
+  const rotateX = mouse.y * -3
+  const rotateY = mouse.x * 4
+
+  const scrollOpacity = Math.max(
+    0,
+    1 - scrollY / 500
+  )
 
   return (
     <section
@@ -65,71 +85,87 @@ export default function Hero({ hero }) {
         items-end
         overflow-hidden
         bg-ink
+        perspective-[1200px]
       "
     >
-      {/* Background Image */}
       {image?.url && (
-        <img
-          src={image.url}
-          alt=""
+        <div
           className="
             absolute
-            inset-0
-            w-full
-            h-full
-            object-cover
-            grayscale
-            contrast-125
-            opacity-70
-            scale-[1.04]
-            transition-transform
-            duration-700
-            ease-out
+            inset-[-35px]
+            overflow-hidden
             will-change-transform
           "
           style={{
             transform: `
-              scale(1.04)
-              translate(${imageMoveX}px, ${imageMoveY - scrollY * 0.015}px)
+              translate3d(${imageMoveX}px, ${imageMoveY}px, 0)
+              rotateX(${rotateX}deg)
+              rotateY(${rotateY}deg)
+              scale(1.08)
             `,
+            transition:
+              'transform 0.45s cubic-bezier(0.22, 1, 0.36, 1)',
           }}
-        />
+        >
+          <img
+            src={image.url}
+            alt=""
+            className="
+              absolute
+              inset-0
+              w-full
+              h-full
+              object-cover
+              grayscale
+              contrast-125
+              opacity-70
+            "
+          />
+
+          <div
+            className="
+              absolute
+              inset-0
+              bg-ink/10
+              animate-[heroZoom_10s_ease-in-out_infinite_alternate]
+            "
+          />
+        </div>
       )}
 
-      {/* Dark Gradient */}
       <div
         className="
           absolute
           inset-0
           bg-gradient-to-t
           from-ink
-          via-ink/20
+          via-ink/25
           to-transparent
+          pointer-events-none
         "
       />
 
-      {/* Soft moving light */}
       <div
         className="
           pointer-events-none
           absolute
-          w-64
-          h-64
+          w-[420px]
+          h-[420px]
           rounded-full
-          bg-white/[0.025]
-          blur-3xl
-          transition-transform
-          duration-700
-          ease-out
+          bg-white/[0.045]
+          blur-[100px]
+          mix-blend-screen
+          will-change-transform
         "
         style={{
-          left: `calc(50% + ${mouse.x * 120}px)`,
-          top: `calc(45% + ${mouse.y * 80}px)`,
+          left: `calc(50% + ${lightX}px)`,
+          top: `calc(45% + ${lightY}px)`,
           transform: 'translate(-50%, -50%)',
+          transition:
+            'left 0.7s cubic-bezier(0.22, 1, 0.36, 1), top 0.7s cubic-bezier(0.22, 1, 0.36, 1)',
         }}
       />
 
-      {/* Main Content */}
       <div
         className="
           relative
@@ -141,9 +177,8 @@ export default function Hero({ hero }) {
           w-full
         "
       >
-        {/* Small intro line */}
         <div
-          className="
+          className={`
             mb-5
             md:mb-6
             flex
@@ -154,21 +189,41 @@ export default function Hero({ hero }) {
             text-[10px]
             uppercase
             tracking-[0.2em]
-            transition-transform
-            duration-500
+            transition-all
+            duration-1000
             ease-out
-          "
+            ${
+              loaded
+                ? 'opacity-100 translate-x-0'
+                : 'opacity-0 -translate-x-10'
+            }
+          `}
           style={{
-            transform: `translateX(${infoMove}px)`,
+            transform: `translateX(${infoMoveX}px)`,
           }}
         >
           <span className="w-8 h-px bg-white/40" />
-          Front-End Developer
+
+          <span className="relative">
+            Front-End Developer
+
+            <span
+              className="
+                absolute
+                left-0
+                -bottom-2
+                h-px
+                w-full
+                bg-white/30
+                origin-left
+                animate-[heroLine_2s_ease-out_0.8s_both]
+              "
+            />
+          </span>
         </div>
 
-        {/* Main Heading */}
         <h1
-          className="
+          className={`
             font-display
             font-black
             text-white
@@ -177,22 +232,37 @@ export default function Hero({ hero }) {
             sm:text-[12vw]
             md:text-[6.2vw]
             will-change-transform
-            transition-transform
-            duration-500
-            ease-out
-          "
+            transition-all
+            duration-[1200ms]
+            ease-[cubic-bezier(0.16,1,0.3,1)]
+            ${
+              loaded
+                ? 'opacity-100 translate-y-0'
+                : 'opacity-0 translate-y-16'
+            }
+          `}
           style={{
             transform: `
-              translate(${titleMoveX}px, ${titleMoveY}px)
+              translate3d(${titleMoveX}px, ${titleMoveY}px, 0)
             `,
           }}
         >
-          {greeting}
+          <span className="inline-block">
+            {greeting}
+          </span>
+
           <br />
-          {name}
+
+          <span
+            className="
+              inline-block
+              animate-[heroTextFloat_5s_ease-in-out_infinite]
+            "
+          >
+            {name}
+          </span>
         </h1>
 
-        {/* Bottom Information */}
         <div
           className="
             mt-7
@@ -206,18 +276,34 @@ export default function Hero({ hero }) {
             md:text-[10px]
             uppercase
             tracking-wider
+            transition-opacity
+            duration-500
           "
+          style={{
+            opacity: scrollOpacity,
+          }}
         >
-          <span>Scroll to explore</span>
+          <span>
+            Scroll to explore
+          </span>
 
           <span className="flex items-center gap-2">
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+            <span
+              className="
+                inline-block
+                w-1.5
+                h-1.5
+                rounded-full
+                bg-white
+                animate-[heroPulse_1.4s_ease-in-out_infinite]
+              "
+            />
+
             Available for work
           </span>
         </div>
       </div>
 
-      {/* Scroll Indicator */}
       <button
         type="button"
         onClick={() => {
@@ -242,12 +328,15 @@ export default function Hero({ hero }) {
           items-center
           gap-2
           text-white/40
-          hover:text-white/80
-          transition-colors
+          hover:text-white
+          transition-all
           duration-300
           cursor-pointer
           group
         "
+        style={{
+          opacity: scrollOpacity,
+        }}
       >
         <span
           className="
@@ -255,12 +344,12 @@ export default function Hero({ hero }) {
             text-[9px]
             tracking-[0.2em]
             uppercase
+            animate-[heroScrollText_2s_ease-in-out_infinite]
           "
         >
           Scroll
         </span>
 
-        {/* Animated line + arrow */}
         <span className="relative flex flex-col items-center">
           <span
             className="
@@ -276,8 +365,8 @@ export default function Hero({ hero }) {
                 block
                 w-full
                 h-1/2
-                bg-white/70
-                animate-[scrollLine_1.8s_ease-in-out_infinite]
+                bg-white/80
+                animate-[scrollLine_1.3s_ease-in-out_infinite]
               "
             />
           </span>
@@ -292,13 +381,14 @@ export default function Hero({ hero }) {
               rotate-45
               -mt-1
               group-hover:border-white
-              transition-colors
+              group-hover:translate-y-1
+              transition-all
+              duration-300
             "
           />
         </span>
       </button>
 
-      {/* Mobile Scroll Arrow */}
       <button
         type="button"
         onClick={() => {

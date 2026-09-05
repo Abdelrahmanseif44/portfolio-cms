@@ -1,3 +1,4 @@
+import { useRef, useState } from 'react'
 
 export default function ProjectCard({ project, index }) {
   const num = String(index + 1).padStart(2, '0')
@@ -6,6 +7,53 @@ export default function ProjectCard({ project, index }) {
   const hasLink = Boolean(project.url)
 
   const Wrapper = hasLink ? 'a' : 'div'
+
+  const cardRef = useRef(null)
+
+  const [tilt, setTilt] = useState({
+    x: 0,
+    y: 0,
+  })
+
+  const [spot, setSpot] = useState({
+    x: 50,
+    y: 50,
+  })
+
+  const handleMouseMove = (e) => {
+    const card = cardRef.current
+    if (!card) return
+
+    const rect = card.getBoundingClientRect()
+
+    const x = (e.clientX - rect.left) / rect.width
+    const y = (e.clientY - rect.top) / rect.height
+
+    const rotateY = (x - 0.5) * 10
+    const rotateX = (y - 0.5) * -10
+
+    setTilt({
+      x: rotateX,
+      y: rotateY,
+    })
+
+    setSpot({
+      x: x * 100,
+      y: y * 100,
+    })
+  }
+
+  const handleMouseLeave = () => {
+    setTilt({
+      x: 0,
+      y: 0,
+    })
+
+    setSpot({
+      x: 50,
+      y: 50,
+    })
+  }
 
   const wrapperProps = hasLink
     ? {
@@ -18,7 +66,11 @@ export default function ProjectCard({ project, index }) {
   return (
     <Wrapper
       {...wrapperProps}
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
       className="
+        project-card
         group
         relative
         block
@@ -26,14 +78,45 @@ export default function ProjectCard({ project, index }) {
         border
         border-line
         bg-paper
-        transition-all
-        duration-500
-        hover:border-ink
-        hover:-translate-y-1
         focus-visible:outline-none
       "
+      style={{
+        transform: `
+          perspective(1200px)
+          rotateX(${tilt.x}deg)
+          rotateY(${tilt.y}deg)
+          translateZ(0)
+        `,
+        transition:
+          tilt.x === 0 && tilt.y === 0
+            ? 'transform 0.7s cubic-bezier(0.16, 1, 0.3, 1)'
+            : 'transform 0.12s ease-out',
+        '--mouse-x': `${spot.x}%`,
+        '--mouse-y': `${spot.y}%`,
+      }}
     >
-      {/* IMAGE */}
+      <div
+        className="
+          pointer-events-none
+          absolute
+          inset-0
+          z-20
+          opacity-0
+          group-hover:opacity-100
+          transition-opacity
+          duration-500
+        "
+        style={{
+          background: `
+            radial-gradient(
+              circle 180px at ${spot.x}% ${spot.y}%,
+              rgba(255,255,255,0.12),
+              transparent 70%
+            )
+          `,
+        }}
+      />
+
       <div
         className="
           relative
@@ -55,7 +138,7 @@ export default function ProjectCard({ project, index }) {
               transition-all
               duration-700
               ease-out
-              group-hover:scale-[1.045]
+              group-hover:scale-[1.07]
               group-hover:grayscale-0
             "
           />
@@ -67,7 +150,6 @@ export default function ProjectCard({ project, index }) {
           </div>
         )}
 
-        {/* DARK HOVER OVERLAY */}
         <div
           className="
             absolute
@@ -79,7 +161,6 @@ export default function ProjectCard({ project, index }) {
           "
         />
 
-        {/* TOP PROJECT NUMBER */}
         <div
           className="
             absolute
@@ -95,11 +176,12 @@ export default function ProjectCard({ project, index }) {
             tracking-[0.16em]
             text-white
             opacity-0
-            -translate-y-2
+            -translate-y-3
             group-hover:opacity-100
             group-hover:translate-y-0
             transition-all
             duration-500
+            z-10
           "
         >
           <span>
@@ -113,7 +195,6 @@ export default function ProjectCard({ project, index }) {
           )}
         </div>
 
-        {/* CENTER ARROW */}
         {hasLink && (
           <div
             className="
@@ -123,12 +204,13 @@ export default function ProjectCard({ project, index }) {
               items-center
               justify-center
               pointer-events-none
+              z-10
             "
           >
             <span
               className="
-                w-12
-                h-12
+                w-14
+                h-14
                 border
                 border-white/70
                 rounded-full
@@ -139,22 +221,50 @@ export default function ProjectCard({ project, index }) {
                 text-lg
                 opacity-0
                 scale-75
+                rotate-[-20deg]
                 group-hover:opacity-100
                 group-hover:scale-100
+                group-hover:rotate-0
                 transition-all
-                duration-500
+                duration-700
+                ease-out
               "
             >
               ↗
             </span>
           </div>
         )}
+
+        <div
+          className="
+            absolute
+            bottom-4
+            left-4
+            right-4
+            flex
+            items-center
+            justify-between
+            text-white
+            opacity-0
+            translate-y-3
+            group-hover:opacity-100
+            group-hover:translate-y-0
+            transition-all
+            duration-500
+            z-10
+          "
+        >
+          <span className="font-mono text-[9px] uppercase tracking-[0.14em]">
+            {project.category || 'Project'}
+          </span>
+
+          <span className="font-mono text-[9px] uppercase tracking-[0.14em]">
+            {hasLink ? 'Open ↗' : 'View'}
+          </span>
+        </div>
       </div>
 
-      {/* CONTENT */}
-      <div className="p-5 md:p-6 flex flex-col gap-3">
-
-        {/* META */}
+      <div className="relative z-10 p-5 md:p-6 flex flex-col gap-3">
         <div className="flex items-center justify-between gap-4">
           <p className="label-tag">
             {num}/{total || '00'}
@@ -176,7 +286,6 @@ export default function ProjectCard({ project, index }) {
           )}
         </div>
 
-        {/* TITLE */}
         <h3
           className="
             font-display
@@ -184,15 +293,15 @@ export default function ProjectCard({ project, index }) {
             text-lg
             md:text-xl
             leading-tight
-            transition-transform
+            transition-all
             duration-500
+            ease-out
             group-hover:translate-x-1
           "
         >
           {project.title}
         </h3>
 
-        {/* DESCRIPTION */}
         {project.description && (
           <p
             className="
@@ -200,13 +309,15 @@ export default function ProjectCard({ project, index }) {
               text-muted
               leading-relaxed
               line-clamp-3
+              transition-all
+              duration-500
+              group-hover:text-ink/70
             "
           >
             {project.description}
           </p>
         )}
 
-        {/* BOTTOM */}
         <div
           className="
             pt-3
@@ -225,6 +336,9 @@ export default function ProjectCard({ project, index }) {
               uppercase
               tracking-[0.14em]
               text-muted
+              transition-colors
+              duration-300
+              group-hover:text-ink
             "
           >
             {project.buttonText || 'Discover'}
@@ -236,7 +350,8 @@ export default function ProjectCard({ project, index }) {
               text-sm
               transition-all
               duration-500
-              group-hover:translate-x-1
+              ease-out
+              group-hover:translate-x-2
               group-hover:-translate-y-1
             "
           >
@@ -245,11 +360,26 @@ export default function ProjectCard({ project, index }) {
         </div>
       </div>
 
-      {/* BOTTOM ACCENT LINE */}
       <span
         className="
           absolute
           bottom-0
+          left-0
+          h-[2px]
+          w-0
+          bg-ink
+          group-hover:w-full
+          transition-all
+          duration-700
+          ease-out
+          z-30
+        "
+      />
+
+      <span
+        className="
+          absolute
+          top-0
           left-0
           h-px
           w-0
@@ -258,6 +388,7 @@ export default function ProjectCard({ project, index }) {
           transition-all
           duration-700
           ease-out
+          z-30
         "
       />
     </Wrapper>
